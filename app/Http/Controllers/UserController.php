@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\User;
+use DB;
+use Auth;
+
 
 class UserController extends Controller
-{
+{   
     /**
      * Display a listing of the resource.
      *
@@ -83,5 +87,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getLocations()
+    {     
+        $userslocations = DB::select(DB::raw("SELECT name, x(location) AS x_location,y(location) AS y_location FROM users"));        
+        return response()->json($userslocations);
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+
+        $data['name'] = $user->name;
+        $data['email'] = $user->email;
+        $data['comments_count'] = $user->comments->count();
+        $data['posts_count'] = $user->posts->count();
+        $data['posts_active_count'] = $user->posts->where('active', 1)->count();
+        $data['posts_inactive_count'] = $user->posts->where('active', 0)->count();
+
+        return view('users.profile', $data);
     }
 }

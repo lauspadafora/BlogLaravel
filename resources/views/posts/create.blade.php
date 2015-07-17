@@ -9,14 +9,14 @@
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">
                         <label>Título</label>
-						<input required="required" value="{{ old('title') }}" placeholder="Título del post" type="text" name="title" class="form-control" required data-validation-required-message="Por favor ingrese un título válido." />                                        
+						<input required="required" value="" placeholder="Título del post" type="text" name="title" class="form-control" required data-validation-required-message="Por favor ingrese un título válido." />                                        
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>                
                 <div class="row control-group">
                     <div class="form-group col-xs-12 floating-label-form-group controls">                    	
                         <label>Post</label>
-                        <textarea name='body' class="form-control">{{ old('body') }}</textarea>			 	                        
+                        <textarea name='body' class="form-control" style="height: 300px;" placeholder="Cuerpo del post"></textarea>			 	                        
                         <p class="help-block text-danger"></p>
                     </div>
                 </div>

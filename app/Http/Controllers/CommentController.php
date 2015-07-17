@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Comments;
 
 class CommentController extends Controller
 {
@@ -37,7 +38,17 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $comment = new Comments();     
+
+        $comment->on_post = $request->get('id_post');
+        $comment->from_user = $request->user()->id;
+        $comment->body = $request->get('body'); 
+
+        $comment->save();
+        
+        $slug = $request->get('slug');
+
+        return redirect('posts/show/'.$slug);   
     }
 
     /**
@@ -82,6 +93,11 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comments::find($id);
+        $comment->delete();        
+                
+        $slug = $comment->post->slug;
+
+        return redirect('posts/show/'.$slug); 
     }
 }

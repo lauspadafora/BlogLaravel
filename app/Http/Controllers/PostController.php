@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PostFormRequest;
 use App\Posts;
+use Auth;
 
 class PostController extends Controller
 {
@@ -18,9 +19,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Posts::where('active',1)->orderBy('created_at','desc')->paginate(5);    
-        $title = 'Latest Posts';   
-        return view('posts.index')->withPosts($posts)->withTitle($title);
+        $posts = Posts::where('active', 1)->orderBy('created_at','desc')->get();    
+        return view('posts.index')->withPosts($posts);
     }
 
     /**
@@ -68,7 +68,7 @@ class PostController extends Controller
            return redirect('/')->withErrors('requested page not found');
         }
 
-        $comments = $post->comments;
+        $comments = $post->comments->sortByDesc('created_at');
         return view('posts.show')->withPost($post)->withComments($comments);
     }
 
@@ -115,8 +115,8 @@ class PostController extends Controller
         $post->body = $request->input('body');
         $post->active = 1;
         
-        $post->save();
-        return redirect('posts/index');        
+        $post->save(); 
+        return view('posts.show')->withPost($post);
     }
 
     /**
@@ -129,16 +129,12 @@ class PostController extends Controller
     {
         $post = Posts::find($id);
         
-        if($post && ($post->author_id == $request->user()->id || $request->user()->is_admin()))
+        if($post && ($post->author_id == Auth::user()->id || Auth::user()->hasRole('Admin')))
         {
-          $post->delete();
-          $data['message'] = 'Post deleted Successfully';
-        }
-        else 
-        {
-          $data['errors'] = 'Invalid Operation. You have not sufficient permissions';
+          $post->active = 0;
+          $post->save();
         }
         
-        return redirect('/')->with($data);
+        return redirect('posts/index');
     }
 }

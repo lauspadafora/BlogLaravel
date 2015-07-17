@@ -18,20 +18,30 @@ Route::controllers([
 ]);
 
 Route::get('/', function () {
-    return view('home');
+     return view('home');
 });
 
 Route::get('/home', function () {
-    return view('home');
+    return redirect('posts/index');
 });
 
 Route::get('/index', function () {
     return view('index');
 });
 
+//Posts
 Route::get('posts/index','PostController@index');
 Route::get('posts/create','PostController@create');
 Route::post('posts/store','PostController@store');
 Route::get('posts/show/{slug}',['as' => 'post', 'uses' => 'PostController@show'])->where('slug', '[A-Za-z0-9-_]+');
 Route::get('posts/edit/{slug}','PostController@edit');
 Route::post('posts/update','PostController@update');
+Route::get('users/getLocations','UserController@getLocations');
+Route::get('posts/destroy/{id}','PostController@destroy');
+
+//Comments
+Route::post('comments/store','CommentController@store');
+Route::get('comments/destroy/{id}','CommentController@destroy');
+
+//Users
+Route::get('users/profile','UserController@profile');

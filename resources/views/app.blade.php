@@ -53,6 +53,9 @@
 	                        <a href="{{ url('posts/create') }}">Crear Post</a>
 	                    </li>
 	                    <li>
+	                        <a href="{{ url('users/profile') }}">Mi Perfil</a>
+	                    </li>
+	                    <li>
 	                        <a href="{{ url('auth/logout') }}">Cerrar Sesión</a>
 	                    </li>
 	                    @endif	                    
@@ -120,6 +123,7 @@
 	    <script src="{{ asset('/js/jquery.js') }}"></script>
 	    <!-- Bootstrap Core JavaScript -->
 	    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+	   	@yield('scripts')
 	</body>
 </html>
 
